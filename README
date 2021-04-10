@@ -1,7 +1,8 @@
-onesixtyone 0.3.2
+onesixtyone 0.4
 By Solar Eclipse <solareclipse@phreedom.org>
+Few bugs fixed by MadMax (john@ev6.net)
 
-Download this software at http://www.phreedom.org/solar/onesixtyone/
+Download or discuss this software at http://www.phreedom.org/solar/onesixtyone/
 
 The SNMP protocol is a stateless, datagram oriented protocol. An SNMP scanner
 is a program that sends SNMP requests to multiple IP addresses, trying

@@ -1,3 +1,12 @@
+2006-11-02	onesixtyone 0.6
+	*  -w option now works.
+	* Spaces allowed in communitry strings read from files.
+	* Added "make dist" functionality
+	* Inlcuded download URL in help message + credit for original author
+
+2005-10-13	onesixtyone 0.4
+	* Now spools communities and hosts from disk instead of loading into ram
+
 2004-01-05	onesixtyone 0.3.2
 	* fixed version number and added a Makefile
 
