@@ -1,5 +1,5 @@
 /*
- * onesixtyone version 0.6 Copyright (C) 2002 solareclipse@phreedom.org
+ * onesixtyone version 0.7 Copyright (C) 2002 solareclipse@phreedom.org
  * 
  * This program is free software; you can redistribute it and/or modify it 
  * under the terms of the GNU General Public License as published by the
@@ -86,7 +86,7 @@ char            singlehost[64];
 void
 usage(char *cmdline)
 {
-    printf("onesixtyone v0.6 ( http://www.portcullis-security.com )\n");
+    printf("onesixtyone v0.7 ( http://labs.portcullis.co.uk/application/onesixtyone/ )\n");
     printf("Based on original onesixtyone by solareclipse@phreedom.org\n");
     printf("\n");
     printf("Usage: onesixtyone [options] <host> <community>\n");
@@ -739,8 +739,12 @@ parse_snmp_response(u_char * buf, int buf_size)
 	return;
     if (parse_snmp_objheader6(buf, buf_size, &i) == -1)
 	return;
-    if (parse_snmp_value(buf, buf_size, &i) == -1)
+    if (parse_snmp_value(buf, buf_size, &i) == -1) {
+    	// If value isn't parsed we still need a CR or the
+	// next response will be displayed on this line.
+        logfx("\n");
 	return;
+    }
 
     logfx("\n");
 }

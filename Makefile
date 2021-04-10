@@ -1,8 +1,9 @@
 CC=gcc
 CFLAGS=-O2 -pipe
-VERSION=0.6
+VERSION=0.7
+BINDIR=/usr/local/bin/
 DIR=onesixtyone-$(VERSION)
-DISTFILES=ChangeLog INSTALL Makefile README dict.txt onesixtyone.c
+DISTFILES=ChangeLog INSTALL Makefile README dict.txt onesixtyone.c COPYING
 
 all: onesixtyone
 
@@ -13,14 +14,13 @@ solaris: onesixtyone.c
 	$(CC) $(CFLAGS) -o onesixtyone onesixtyone.c -lsocket -lnsl
 
 install:
-	cp onesixtyone /usr/local/bin
+	install -m 0755 -o root -g 0 onesixtyone $(BINDIR)
 
 clean:
 	rm -rf onesixtyone
 
 dist:
 	rm -rf $(DIR)
-	rm $(DIR).tar.gz
 	mkdir $(DIR)
 	cp $(DISTFILES) $(DIR)
-	tar cfz $(DIR).tar.gz $(DIR)
+	tar --owner root --group 0 -cz -f $(DIR).tar.gz $(DIR)
