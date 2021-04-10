@@ -68,6 +68,7 @@ char           *snmp_errors[] = {
 };
 
 struct {
+    int		    portno;
     int             debug;
     int             log;
     int             quiet;
@@ -93,6 +94,7 @@ usage(char *cmdline)
     printf("  -c <communityfile> file with community names to try\n");
     printf("  -i <inputfile>     file with target hosts\n");
     printf("  -o <outputfile>    output log\n");
+    printf("  -p <port>          port number\n");
     printf
 	("  -d                 debug mode, use twice for more information\n\n");
     printf
@@ -170,12 +172,13 @@ init_options(int argc, char *argv[])
     o.log = 0;
     o.quiet = 0;
     o.wait = 10;
+    o.portno = 161;
     input_file = 0;
     community_file = 0;
 
     o.log_fd = NULL;
 
-    while ((arg = getopt(argc, argv, "c:di:o:w:q")) != EOF) {
+    while ((arg = getopt(argc, argv, "p:c:di:o:w:q")) != EOF) {
 	switch (arg) {
 	case 'c':
 	    community_file = 1;
@@ -195,6 +198,9 @@ init_options(int argc, char *argv[])
 	    break;
 	case 'w':
 	    o.wait = atol(optarg);	/* convert to nanoseconds */
+	    break;
+	case 'p':
+	    o.portno=port(optarg);
 	    break;
 	case 'q':
 	    o.quiet = 1;
@@ -220,8 +226,8 @@ init_options(int argc, char *argv[])
 	snprintf(singlehost, sizeof(singlehost), "%s", argv[optind++]);
 	host_count = 1;
 	if (o.debug > 0)
-	    printf("Target ip read from command line: %s\n",
-		   argv[optind - 1]);
+	    printf("Target ip read from command line: %s:%d\n",
+		   argv[optind - 1],o.portno);
     } else {
 	read_hosts((char *) &input_filename);
     }
@@ -269,6 +275,18 @@ init_options(int argc, char *argv[])
 
     if (o.debug > 0)
 	printf("Waiting for %ld milliseconds between packets\n", o.wait);
+}
+
+int port(const char* myport){
+    int port_num=0;
+    int def_num=161;
+
+    port_num=atoi(myport);
+    if (port_num >= 0 && port_num <= 65535){
+        return port_num;
+    }else{
+        return def_num;
+    }
 }
 
 int
@@ -881,7 +899,7 @@ main(int argc, char *argv[])
      * remote address 
      */
     remote_addr.sin_family = AF_INET;
-    remote_addr.sin_port = htons(161);
+    remote_addr.sin_port = htons(o.portno);
 
     printf("Scanning %d hosts, %d communities\n", host_count,
 	   community_count);
